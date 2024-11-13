@@ -21,7 +21,7 @@ CREATE TABLE Inventory
     PRIMARY KEY (item_id)
 );
 
-CREATE TABLE Order
+CREATE TABLE Orders
 (
     order_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT
