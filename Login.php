@@ -22,7 +22,7 @@
         session_start();
 
         // Generate a random customer_id if it doesn't already exist in the session
-        if (!isset($_SESSION['customer_id'])) 
+        if ($_SESSION['customer_id']) 
         {
             $_SESSION['customer_id'] = rand(10,90); // Random INT for customer ID
             $customer_id = $_SESSION['customer_id'];
