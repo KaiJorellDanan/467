@@ -67,9 +67,9 @@ CREATE TABLE Cart
 
 CREATE TABLE Shipping_cost
 (
-    shipping_cost_id INT NOT NULL,
+    shipping_cost_id INT NOT NULL AUTO_INCREMENT,
     weight INT NOT NULL,
-    shipping_cost INT NOT NULL,
+    shipping_cost FLOAT NOT NULL,
 
     PRIMARY KEY (shipping_cost_id)
 );
