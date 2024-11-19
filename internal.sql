@@ -19,11 +19,11 @@ CREATE TABLE Customer
 
 CREATE TABLE Inventory
 (
-    item_id INT NOT NULL,
-    item_desc VARCHAR(50),
+    item_id INT(11) NOT NULL,
     quantity INT,
 
-    PRIMARY KEY (item_id)
+    PRIMARY KEY (item_id),
+    FOREIGN KEY (item_id) REFERENCES parts(number)
 );
 
 CREATE TABLE Orders
