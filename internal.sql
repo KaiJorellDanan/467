@@ -1,4 +1,6 @@
 DROP TABLE Shipping;
+DROP TABLE Cart;
+DROP TABLE Shipping_cost;
 DROP TABLE Orders;
 DROP TABLE Customer;
 DROP TABLE Inventory;
@@ -28,7 +30,6 @@ CREATE TABLE Inventory
 
 CREATE TABLE Orders
 (
-    number int(11) NOT NULL,
     order_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT NOT NULL,
     order_status VARCHAR(20),
@@ -38,7 +39,7 @@ CREATE TABLE Orders
     
     PRIMARY KEY (order_id),
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
-    FOREIGN KEY (number) REFERENCES parts(number);
+    
 );
 
 CREATE TABLE Shipping
@@ -52,4 +53,23 @@ CREATE TABLE Shipping
     PRIMARY KEY (shipping_id),
     FOREIGN KEY (order_id) REFERENCES Orders(order_id),
     FOREIGN KEY (item_id) REFERENCES Inventory(item_id)
+);
+
+CREATE TABLE Cart
+(
+    customer_id INT NOT NULL,
+    item_id INT NOT NULL,
+
+    PRIMARY KEY (customer_id, item_id),
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+    FOREIGN KEY (item_id) REFERENCES Inventory(item_id)
+);
+
+CREATE TABLE Shipping_cost
+(
+    shipping_cost_id INT NOT NULL,
+    weight INT NOT NULL,
+    shipping_cost INT NOT NULL
+
+    PRIMARY KEY(shipping_cost_id)
 );
