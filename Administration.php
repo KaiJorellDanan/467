@@ -36,16 +36,17 @@
                 $remove = $_POST['remove'];
                 $new_weight = $_POST['new_weight'];
                 $new_shipping_cost = $_POST['new_shipping_cost'];
+                $add_button_click = $_POST['add_button'];
             }
 
-            if($remove == 'begone')
+            if($remove == "begone")
             {
                 $sql = "DELETE FROM Shipping_cost
                         WHERE shipping_cost_id = '$shipping_id';";
                 $pdo->exec($sql);
             }
 
-            else if($new_weight >= 0 && $shipping_cost >= 0)
+            if($new_weight >= 0 && $shipping_cost >= 0 && $add_button_click == "clicked")
             {
                 $sql = "INSERT INTO Shipping_cost(weight, shipping_cost) VALUES
                         ('$new_weight','$new_shipping_cost');";
@@ -116,7 +117,7 @@
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             Weight: <input type="text" name="new_weight">
             Cost: <input type="text" name="new_shipping_cost">
-            <button type="submit">Add new bracket</button>
+            <button type="submit" name="add_button" value="clicked">Add new bracket</button>
         </form>
     </body>
 </html>
