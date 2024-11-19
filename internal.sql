@@ -59,6 +59,7 @@ CREATE TABLE Cart
 (
     customer_id INT NOT NULL,
     item_id INT NOT NULL,
+    customer_queue INT NOT NULL,
 
     PRIMARY KEY (customer_id, item_id),
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
