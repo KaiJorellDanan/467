@@ -1,4 +1,4 @@
-INSERT INTO Inventory (id, quantity) VALUES
+INSERT INTO Inventory (item_id, quantity) VALUES
 (1, 12),
 (2, 8),
 (3, 10),
