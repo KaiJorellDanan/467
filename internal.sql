@@ -39,7 +39,7 @@ CREATE TABLE Orders
     
     PRIMARY KEY (order_id),
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
-    
+
 );
 
 CREATE TABLE Shipping
@@ -69,7 +69,7 @@ CREATE TABLE Shipping_cost
 (
     shipping_cost_id INT NOT NULL,
     weight INT NOT NULL,
-    shipping_cost INT NOT NULL
+    shipping_cost INT NOT NULL,
 
-    PRIMARY KEY(shipping_cost_id)
+    PRIMARY KEY (shipping_cost_id)
 );
