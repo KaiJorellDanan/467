@@ -18,18 +18,12 @@
             echo "Connection to database failed: " . $e->getMessage();
         }
 
-        // Generate a random customer_id if it doesn't already exist in the session
-        session_start();
-
         $sql = "SELECT * FROM Customer;";
         $result = $pdo->query($sql);
 
-        // Generate a random customer_id if it doesn't already exist in the session
-        if ($_SESSION['customer_id']) 
-        {
-            $_SESSION['customer_id'] = $result->rowCount()+1;
-            $customer_id = $_SESSION['customer_id'];
-        }
+        session_start();
+        $_SESSION['customer_id'] = $result->rowCount()+1;
+        $customer_id = $_SESSION['customer_id'];
 
         if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
