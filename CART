@@ -5,24 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart - Billing Information</title>
     <style>
-        /* Basic styling */
+        /* Basic container styling */
         .container {
-            max-width: 500px;
-            margin: 0 auto;
+            max-width: 600px;
+            margin: 20px auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-family: Arial, sans-serif;
         }
+        /* Centered headings */
         h1, h2 {
             text-align: center;
         }
-        .info-section, .billing-section {
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-bottom: 20px;
         }
-        .info-section p, .billing-section label {
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        /* Billing form styling */
+        .billing-section label {
+            display: block;
+            margin: 10px 0 5px;
             font-size: 1.1em;
-            margin-bottom: 8px;
         }
         input[type="text"], input[type="email"], input[type="number"] {
             width: 100%;
@@ -31,6 +44,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        /* Button styling */
         button {
             width: 100%;
             padding: 10px;
@@ -52,35 +66,150 @@
     <h1>Cart</h1>
     <h2>Order Summary</h2>
 
-    <!-- Order Details (Amount, Weight, Shipping, Total) -->
-    <div class="info-section">
-        <p><strong>Amount:</strong> </p>
-        <p><strong>Weight:</strong> </p>
-        <p><strong>Shipping:</strong> </p>
-        <p><strong>Total:</strong> </p>
-    </div>
+    <?php
+    session_start();
+    // Retrieve the customer ID from session
+    $customer_id = $_SESSION['customer_id'] ?? null;
+
+    // If customer ID isn't found
+    if (!$customer_id) {
+        echo "<p>No customer ID found. Please log in or start shopping first.</p>";
+        exit;
+    }
+
+    // Database connection credentials
+    $username = "z1952360";
+    $password = "2004May03";
+
+    try {
+        // Establish database connection
+        $dsn = "mysql:host=courses;dbname=z1952360";
+        $pdo = new PDO($dsn, $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Check if the Remove button was pressed
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
+            $item_id = (int) $_POST['item_id'];
+
+            // SQL query to remove the item from the cart
+            $stmt = $pdo->prepare("DELETE FROM Cart WHERE customer_id = :customer_id AND item_id = :item_id");
+            $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+            $stmt->bindParam(':item_id', $item_id, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                echo "<p>Item removed successfully.</p>";
+            } else {
+                echo "<p>Failed to remove the item.</p>";
+            }
+
+            // Redirect back to the cart page to reflect changes
+            header("Location: https://students.cs.niu.edu/~z2003741/476/Cart.php");
+            exit;  // Make sure no further code is executed after the redirect
+        }
+
+        // Query to retrieve cart items and associated part details
+        $stmt = $pdo->prepare("
+            SELECT c.item_id, c.customerq, c.qweight, p.description, p.price, p.pictureURL
+            FROM Cart c
+            JOIN parts p ON c.item_id = p.number
+            WHERE c.customer_id = :customer_id
+        ");
+        $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($cartItems):
+            // Initialize totals
+            $totalPrice = 0;
+            $totalWeight = 0;
+
+            // Generate the cart table
+            echo "<table>
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Picture</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Weight (lbs)</th>
+                            <th>Price ($)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+
+            // Loop through each item in the cart
+            foreach ($cartItems as $item) {
+                $itemTotalPrice = $item['price'] * $item['customerq'];
+                $totalPrice += $itemTotalPrice;
+                $totalWeight += $item['qweight'];
+
+                // Output table row for each item
+                echo "<tr>
+                        <td>{$item['item_id']}</td>
+                        <td><img src='" . htmlspecialchars($item['pictureURL']) . "' alt='Item Image' style='width:50px;height:50px;'></td>
+                        <td>" . htmlspecialchars($item['description']) . "</td>
+                        <td>" . htmlspecialchars($item['customerq']) . "</td>
+                        <td>" . htmlspecialchars($item['qweight']) . " lbs</td>
+                        <td>$" . number_format($item['price'], 2) . "</td>
+                        <td>
+                            <!-- Form to remove item from cart -->
+                            <form method='post' action='Cart.php'>
+                                <input type='hidden' name='item_id' value='" . htmlspecialchars($item['item_id']) . "'>
+                                <button type='submit'>Remove</button>
+                            </form>
+                        </td>
+                      </tr>";
+            }
+
+            // Output totals row
+            echo "</tbody>
+                  <tfoot>
+                      <tr>
+                          <th colspan='4'>Totals</th>
+                          <th>{$totalWeight} lbs</th>
+                          <th colspan='2'>$" . number_format($totalPrice, 2) . "</th>
+                      </tr>
+                  </tfoot>
+                </table>";
+        else:
+            // Display message if the cart is empty
+            echo "<p>Your cart is empty.</p>";
+        endif;
+        
+    } catch (PDOException $e) {
+        // Handle database connection errors
+        echo "<p>Connection to database failed: " . htmlspecialchars($e->getMessage()) . "</p>";
+        exit;
+    }
+    ?>
 
     <h2>Billing Information</h2>
     <!-- Billing Form -->
     <form method="post" action="process_billing.php">
         <div class="billing-section">
+            <!-- Customer Name -->
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="name" required>
 
+            <!-- Customer Email -->
             <label for="email">Email Address:</label>
             <input type="email" id="email" name="email" required>
 
+            <!-- Billing Address -->
             <label for="address">Address:</label>
             <input type="text" id="address" name="address" required>
 
+            <!-- Credit Card Number -->
             <label for="cc">Credit Card Number:</label>
             <input type="number" id="cc" name="cc" required>
 
+            <!-- Credit Card Expiration Date -->
             <label for="exp">Expiration Date:</label>
             <input type="text" id="exp" name="exp" placeholder="MM/YY" required>
         </div>
 
-        <!-- Submit Button -->
+        <!-- Submit Payment Button -->
         <button type="submit">Submit Payment</button>
     </form>
 </div>
