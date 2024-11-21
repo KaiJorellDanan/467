@@ -5,7 +5,11 @@
         {
             text-align: center;
             table-layout: fixed;
-            td { width: 33%; }
+            td 
+            { 
+                width: 33%;
+                font-weight: normal; 
+            }
         }
     </style>
     <head>
@@ -34,7 +38,6 @@
                 $new_quant = $_POST["new_quantity"];
                 $partnum_update = $_POST["part_number"];
                 $search_term = $_POST["search"];
-                $search_term = strip_tags($search_term);
             }
             
             if($new_quant >= 0)
@@ -63,11 +66,11 @@
     <body>
         <h1>Receiving Warehouse</h1>
         <h2>Car Parts Warehouse</h2>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Receiving.php';">Receiving</button>
         <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Orders.php';">Orders</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Receiving.php';">Receiving</button>
         <form method="post">
-        Search by Description: <input type="text" name="search">
-        <button type="submit">Search</button>
+            Search by Description: <input type="text" name="search">
+            <button type="submit">Search</button>
         </form>
     </body>
 
@@ -81,6 +84,7 @@
         echo "<th>Price</th>";
         echo "<th>Weight</th>";
         echo "<th>Quantity</th>";
+        echo "<th>Update Quantity</th>";
         echo "</tr>";
 
         while ($row = $result->fetch()) 
