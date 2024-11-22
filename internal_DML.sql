@@ -1,5 +1,5 @@
 INSERT INTO Shipping_cost(weight, shipping_cost) VALUES
-(0, 0)
+(0, 0),
 (1, 0.99),
 (2, 1.99),
 (5, 5.99),
