@@ -17,6 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Receiving Parts</title>
         <?php
+            // connect to my database
             $username = "z1952360";
             $password = "2004May03";
             try 
@@ -29,7 +30,8 @@
             { // handle that exception
                 echo "Connection to database failed: " . $e->getMessage();
             }
-
+        
+            // connect to legacy database
             $username2 = "student";
             $password2 = "student";
             try 
@@ -42,9 +44,8 @@
             { // handle that exception
                 echo "Connection to database failed: " . $e->getMessage();
             }
-        ?>
-
-        <?php
+        
+            // get the form varaibles from post method
             if ($_SERVER["REQUEST_METHOD"] == "POST")
             {
                 $showparts = $_POST["suppliers"];
@@ -53,6 +54,7 @@
                 $search_term = $_POST["search"];
             }
             
+            //if the new_quantity is >= 0 update the inventory with that quantity
             if($new_quant >= 0)
             {
                 $sql = "UPDATE Inventory 
@@ -61,6 +63,7 @@
                 $pdo->exec($sql);
             }
 
+            //if the search term isn't empty then switch the search in the parts table sql
             if(!empty($search_term))
             {
                 $sql = "SELECT * FROM parts
@@ -84,7 +87,10 @@
     </body>
 
     <?php
+        // print the parts table with the inventory quantity from my inventory table
         $result = $pdo2->query($sql);
+
+        // print table headers
         echo "<table style='width:80%'>";
         echo "<tr>"; 
         echo "<th>Picture</th>";
@@ -95,7 +101,8 @@
         echo "<th>Quantity</th>";
         echo "<th>Update Quantity</th>";
         echo "</tr>";
-
+        
+        // loop to get all of the rows of the table from the select statement
         while ($row = $result->fetch()) 
         {
             $number = $row['number'];
@@ -107,6 +114,7 @@
             $price = number_format($price, 2);
             $weight = number_format($weight, 2);
 
+            // find the matching inventory quantity from the part number
             $query_quant = "SELECT quantity FROM Inventory
                             WHERE item_id = '$number';";
             $result2 = $pdo->query($query_quant);
