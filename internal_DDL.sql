@@ -35,7 +35,6 @@ CREATE TABLE Orders
     order_status VARCHAR(20),
     price FLOAT(8,2),
     order_weight FLOAT(8,2),
-    rate FLOAT(8,2),
     
     PRIMARY KEY (order_id),
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
@@ -59,7 +58,8 @@ CREATE TABLE Cart
 (
     customer_id INT NOT NULL,
     item_id INT NOT NULL,
-    customer_queue INT NOT NULL,
+    customerq INT NOT NULL,
+    qweight INT NOT NULL,
 
     PRIMARY KEY (customer_id, item_id),
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
@@ -68,9 +68,9 @@ CREATE TABLE Cart
 
 CREATE TABLE Shipping_cost
 (
-    shipping_cost_id INT NOT NULL AUTO_INCREMENT,
+    shipping_cost_id INT NOT NULL,
     weight INT NOT NULL,
-    shipping_cost FLOAT NOT NULL,
+    shipping_cost INT NOT NULL,
 
     PRIMARY KEY (shipping_cost_id)
 );
