@@ -29,6 +29,19 @@
             { // handle that exception
                 echo "Connection to database failed: " . $e->getMessage();
             }
+
+            $username2 = "student";
+            $password2 = "student";
+            try 
+            { // if something goes wrong, an exception is thrown
+                
+                $dsn2 = "mysql:host=blitz.cs.niu.edu;port=3306;dbname=csci467";
+                $pdo2 = new PDO($dsn2, $username2, $password2);
+            }
+            catch(PDOexception $e) 
+            { // handle that exception
+                echo "Connection to database failed: " . $e->getMessage();
+            }
         ?>
 
         <?php
@@ -50,23 +63,19 @@
 
             if(!empty($search_term))
             {
-                $sql = "SELECT number, description, price, weight, pictureURL, Inventory.quantity
-                        FROM parts
-                        LEFT JOIN Inventory ON parts.number = Inventory.item_id
+                $sql = "SELECT * FROM parts
                         WHERE description LIKE '%$search_term%';";
             }
             else
             {
-                $sql = "SELECT number, description, price, weight, pictureURL, Inventory.quantity
-                        FROM parts
-                        LEFT JOIN Inventory ON parts.number = Inventory.item_id;";
+                $sql = "SELECT * FROM parts";
             }
         ?>  
     </head>
     <body>
         <h1>Receiving Warehouse</h1>
         <h2>Car Parts Warehouse</h2>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Orders.php';">Orders</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Receiving.php';">Orders</button>
         <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Receiving.php';">Receiving</button>
         <form method="post">
             Search by Description: <input type="text" name="search">
@@ -75,7 +84,7 @@
     </body>
 
     <?php
-        $result = $pdo->query($sql);
+        $result = $pdo2->query($sql);
         echo "<table style='width:80%'>";
         echo "<tr>"; 
         echo "<th>Picture</th>";
@@ -91,10 +100,19 @@
         {
             $number = $row['number'];
             $description = $row['description'];
+            $picture = $row['pictureURL'];
             $price = $row['price'];
             $weight = $row['weight'];
-            $picture = $row['pictureURL'];
-            $quantity = $row['quantity'];
+
+            $price = number_format($price, 2);
+            $weight = number_format($weight, 2);
+
+            $query_quant = "SELECT quantity FROM Inventory
+                            WHERE item_id = '$number';";
+            $result2 = $pdo->query($query_quant);
+            $row2 = $result2->fetch();
+
+            $quantity = $row2['quantity'];
 
             echo "<tr>";
             echo "<td><img src='$picture' alt='Part Picture' style='width:100px;'></td>";
