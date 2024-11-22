@@ -1,3 +1,13 @@
+INSERT INTO Shipping_cost(weight, shipping_cost) VALUES
+(0, 0)
+(1, 0.99),
+(2, 1.99),
+(5, 5.99),
+(10, 9.99),
+(20, 19.99),
+(50, 25.99),
+(100, 49.99);
+
 INSERT INTO Inventory (item_id, quantity) VALUES
 (1, 12),
 (2, 8),
