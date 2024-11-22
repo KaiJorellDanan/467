@@ -24,8 +24,7 @@ CREATE TABLE Inventory
     item_id INT(11) NOT NULL,
     quantity INT,
 
-    PRIMARY KEY (item_id),
-    FOREIGN KEY (item_id) REFERENCES parts(number)
+    PRIMARY KEY (item_id)
 );
 
 CREATE TABLE Orders
@@ -68,7 +67,7 @@ CREATE TABLE Cart
 
 CREATE TABLE Shipping_cost
 (
-    shipping_cost_id INT NOT NULL,
+    shipping_cost_id INT NOT NULL AUTO_INCREMENT,
     weight INT NOT NULL,
     shipping_cost INT NOT NULL,
 
