@@ -104,8 +104,8 @@
     <body>
         <h1>Receiving Warehouse</h1>
         <h2>Car Parts Warehouse</h2>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Receiving.php';">Orders</button>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Receiving.php';">Receiving</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467Receiving.php';">Orders</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Receiving.php';">Receiving</button>
         <form method="post">
             Search by Description: <input type="text" name="search">
             <button type="submit">Search</button>
