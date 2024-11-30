@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
     <style>
-        body 
-        {
+        body {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -19,33 +18,28 @@
             background-size: 100%;
             color: #fff;
         }
-        .boarder
-        {
+        .boarder {
             border: 5px solid #000;
             border-radius: 10px;
             padding: 100px;
             text-align: center;
             background color: #000;
         }
-        h1 
-        {
+        h1 {
             font-size: 3em;
             margin-bottom: 20px;
         }
-        p 
-        {
+        p {
             font-size: 1.5;
             margin-bottom: 20px;
         }
-        button 
-        {
+        button {
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
             background-color: #2471a3;
         }
-        button:hover
-        {
+        button:hover {
             background-color: #ebf5fb;
         }
     </style>
