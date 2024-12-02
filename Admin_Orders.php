@@ -64,43 +64,55 @@
                 $sql3 = "SELECT * FROM Cart
                          WHERE customer_id = '$cust_id_grabbed';";
                 $result3 = $pdo->query($sql3);
-
+                
                 // loop to get all of the rows of the table from the select statement
-                echo "<table style='width:80%'>";
-                echo "<th>Picture</th>";
-                echo "<th>Part Number</th>";
-                echo "<th>Description</th>";
-                echo "<th>Order Quantity</th>";
-                echo "<th>Order Weight</th>";
-                while ($row3 = $result3->fetch()) 
+                if($result3->rowCount() > 0)
                 {
-                    $item_id = $row3['item_id'];
-                    $customerq = $row3['customerq'];
-                    $qweight = $row3['qweight'];
-
-                    $qweight = number_format($qweight, 2);
-
-                    $sql4 = "SELECT * FROM parts
-                             WHERE number = '$item_id';";
-                    $result4 = $pdo2->query($sql4);
-
-                    // loop to get all of the rows of the table from the select statement
-                    while ($row4 = $result4->fetch()) 
+                    echo "<table style='width:80%'>";
+                    echo "<th>Picture</th>";
+                    echo "<th>Part Number</th>";
+                    echo "<th>Description</th>";
+                    echo "<th>Order Quantity</th>";
+                    echo "<th>Order Weight</th>";
+                    echo "<th>Order Price</th>";
+                    while ($row3 = $result3->fetch()) 
                     {
-                        $number = $row4['number'];
-                        $description = $row4['description'];
-                        $picture = $row4['pictureURL'];
+                        $item_id = $row3['item_id'];
+                        $customerq = $row3['customerq'];
+                        $qweight = $row3['qweight'];
 
-                        echo "<tr>";
-                        echo "<td><img src='$picture' alt='Part Picture' style='width:100px;'></td>";
-                        echo "<td>$number</td>";
-                        echo "<td>$description</td>";
-                        echo "<td>$customerq</td>";
-                        echo "<td>$qweight</td>";
-                        echo "</tr>";
+                        $qweight = number_format($qweight, 2);
+
+                        $sql4 = "SELECT * FROM parts
+                                WHERE number = '$item_id';";
+                        $result4 = $pdo2->query($sql4);
+
+                        // loop to get all of the rows of the table from the select statement
+                        while ($row4 = $result4->fetch()) 
+                        {
+                            $number = $row4['number'];
+                            $description = $row4['description'];
+                            $picture = $row4['pictureURL'];
+                            $cost = $row4['price'];
+
+                            $cost = $cost * $customerq;
+
+                            echo "<tr>";
+                            echo "<td><img src='$picture' alt='Part Picture' style='width:100px;'></td>";
+                            echo "<td>$number</td>";
+                            echo "<td>$description</td>";
+                            echo "<td>$customerq</td>";
+                            echo "<td>$qweight</td>";
+                            echo "<td>$cost</td>";
+                            echo "</tr>";
+                        }
                     }
+                    echo "</table>";
                 }
-                echo "</table>";
+                else
+                {
+                    echo "<p style='text-align:center'>No Entries Found</p>";
+                }
             }
             
             $sql = "SELECT * FROM Orders;";
