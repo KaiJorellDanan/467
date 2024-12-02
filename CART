@@ -1,190 +1,214 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - Billing Information</title>
     <style>
-        /* Basic container styling */
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-family: Arial, sans-serif;
-        }
-        /* Centered headings */
-        h1, h2 {
-            text-align: center;
-        }
-        /* Table styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-        /* Billing form styling */
-        .billing-section label {
-            display: block;
-            margin: 10px 0 5px;
-            font-size: 1.1em;
-        }
-        input[type="text"], input[type="email"], input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        /* Button styling */
-        button {
-            width: 100%;
-            padding: 10px;
-            font-size: 1.1em;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.info, .error {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.info {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.cart-table th, .cart-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.cart-table th {
+    background-color: #f4f4f4;
+}
+
+.cart-table img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+</style>
 </head>
-<body>
 
-<div class="container">
-    <h1>Cart</h1>
-    <h2>Order Summary</h2>
+<?php
+session_start();
+// Retrieve the customer ID from session
+$customer_id = $_SESSION['customer_id'] ?? null;
 
-    <?php
-    session_start();
-    // Retrieve the customer ID from session
-    $customer_id = $_SESSION['customer_id'] ?? null;
+// If customer ID isn't found
+if (!$customer_id) {
+    echo "<p>No customer ID found. Please log in or start shopping first.</p>";
+    exit;
+}
 
-    // If customer ID isn't found
-    if (!$customer_id) {
-        echo "<p>No customer ID found. Please log in or start shopping first.</p>";
+// Database connection credentials
+$username = "z2003741";
+$password = "2003Jan28";
+$username1 = "student";
+$password1 = "student";
+
+try {
+    // Establish database connections
+    $dsn1 = "mysql:host=courses;dbname=z2003741"; // z2003741 database
+    $pdo2 = new PDO($dsn1, $username, $password);
+    $pdo2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $dsn2 = "mysql:host=blitz.cs.niu.edu;dbname=csci467"; // Blitz database
+    $pdo = new PDO($dsn2, $username1, $password1);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Query Cart data from z2003741
+    $stmt1 = $pdo2->prepare("SELECT item_id, customerq, qweight FROM Cart WHERE customer_id = :customer_id");
+    $stmt1->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+    $stmt1->execute();
+    $cartItems = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+    // If cart is empty
+    if (!$cartItems) {
+        echo "<p>Your cart is empty.</p>";
         exit;
     }
 
-    // Database connection credentials
-    $username = "z1952360";
-    $password = "2004May03";
+    // Query Parts data from Blitz
+    $itemIds = array_column($cartItems, 'item_id'); // Extract item IDs from Cart
+    $placeholders = implode(',', array_fill(0, count($itemIds), '?')); // Create placeholders for IN clause
+    $stmt2 = $pdo->prepare("SELECT number, description, price, pictureURL FROM parts WHERE number IN ($placeholders)");
+    $stmt2->execute($itemIds);
+    $partsData = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+    // Combine data from both queries
+    $mergedData = [];
+    foreach ($cartItems as $cartItem) {
+        foreach ($partsData as $part) {
+            if ($cartItem['item_id'] == $part['number']) {
+                $mergedData[] = array_merge($cartItem, $part);
+                break;
+            }
+        }
+    }
+
+    // Initialize totals
+    $totalPrice = 0;
+    $totalWeight = 0;
+
+    // Generate the cart table
+    echo "<table>
+            <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Picture</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Weight (lbs)</th>
+                    <th>Price ($)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>";
+
+    // Loop through each merged item
+    foreach ($mergedData as $item) {
+        $itemTotalPrice = $item['price'] * $item['customerq'];
+        $totalPrice += $itemTotalPrice;
+        $totalWeight += $item['qweight'];
+
+        // Output table row for each item
+        echo "<tr>
+                <td>{$item['item_id']}</td>
+                <td><img src='" . htmlspecialchars($item['pictureURL']) . "' alt='Item Image' style='width:50px;height:50px;'></td>
+                <td>" . htmlspecialchars($item['description']) . "</td>
+                <td>" . htmlspecialchars($item['customerq']) . "</td>
+                <td>" . htmlspecialchars($item['qweight']) . " lbs</td>
+                <td>$" . number_format($item['price'], 2) . "</td>
+                <td>
+                    <!-- Form to remove item from cart -->
+                    <form method='post' action='Cart.php'>
+                        <input type='hidden' name='item_id' value='" . htmlspecialchars($item['item_id']) . "'>
+                        <button type='submit'>Remove</button>
+                    </form>
+                </td>
+              </tr>";
+    }
+
+    // Output totals row
+    echo "</tbody>
+          <tfoot>
+              <tr>
+                  <th colspan='4'>Totals</th>
+                  <th>{$totalWeight} lbs</th>
+                  <th colspan='2'>$" . number_format($totalPrice, 2) . "</th>
+              </tr>
+          </tfoot>
+        </table>";
+
+} catch (PDOException $e) {
+    // Handle database connection errors
+    echo "<p>Connection to database failed: " . htmlspecialchars($e->getMessage()) . "</p>";
+    exit;
+}
+
+// Check if the Remove button was pressed
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
+    $item_id = (int) $_POST['item_id'];
 
     try {
-        // Establish database connection
-        $dsn = "mysql:host=courses;dbname=z1952360";
-        $pdo = new PDO($dsn, $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // SQL query to remove the item from the cart in z2003741
+        $stmt = $pdo2->prepare("DELETE FROM Cart WHERE customer_id = :customer_id AND item_id = :item_id");
+        $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+        $stmt->bindParam(':item_id', $item_id, PDO::PARAM_INT);
 
-        // Check if the Remove button was pressed
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
-            $item_id = (int) $_POST['item_id'];
-
-            // SQL query to remove the item from the cart
-            $stmt = $pdo->prepare("DELETE FROM Cart WHERE customer_id = :customer_id AND item_id = :item_id");
-            $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
-            $stmt->bindParam(':item_id', $item_id, PDO::PARAM_INT);
-
-            if ($stmt->execute()) {
-                echo "<p>Item removed successfully.</p>";
-            } else {
-                echo "<p>Failed to remove the item.</p>";
-            }
-
-            // Redirect back to the cart page to reflect changes
-            header("Location: https://students.cs.niu.edu/~z2003741/476/Cart.php");
-            exit;  // Make sure no further code is executed after the redirect
+        if ($stmt->execute()) {
+            echo "<p>Item removed successfully.</p>";
+        } else {
+            echo "<p>Failed to remove the item.</p>";
         }
 
-        // Query to retrieve cart items and associated part details
-        $stmt = $pdo->prepare("
-            SELECT c.item_id, c.customerq, c.qweight, p.description, p.price, p.pictureURL
-            FROM Cart c
-            JOIN parts p ON c.item_id = p.number
-            WHERE c.customer_id = :customer_id
-        ");
-        $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
-        $stmt->execute();
-        $cartItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if ($cartItems):
-            // Initialize totals
-            $totalPrice = 0;
-            $totalWeight = 0;
-
-            // Generate the cart table
-            echo "<table>
-                    <thead>
-                        <tr>
-                            <th>Item ID</th>
-                            <th>Picture</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Weight (lbs)</th>
-                            <th>Price ($)</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-
-            // Loop through each item in the cart
-            foreach ($cartItems as $item) {
-                $itemTotalPrice = $item['price'] * $item['customerq'];
-                $totalPrice += $itemTotalPrice;
-                $totalWeight += $item['qweight'];
-
-                // Output table row for each item
-                echo "<tr>
-                        <td>{$item['item_id']}</td>
-                        <td><img src='" . htmlspecialchars($item['pictureURL']) . "' alt='Item Image' style='width:50px;height:50px;'></td>
-                        <td>" . htmlspecialchars($item['description']) . "</td>
-                        <td>" . htmlspecialchars($item['customerq']) . "</td>
-                        <td>" . htmlspecialchars($item['qweight']) . " lbs</td>
-                        <td>$" . number_format($item['price'], 2) . "</td>
-                        <td>
-                            <!-- Form to remove item from cart -->
-                            <form method='post' action='Cart.php'>
-                                <input type='hidden' name='item_id' value='" . htmlspecialchars($item['item_id']) . "'>
-                                <button type='submit'>Remove</button>
-                            </form>
-                        </td>
-                      </tr>";
-            }
-
-            // Output totals row
-            echo "</tbody>
-                  <tfoot>
-                      <tr>
-                          <th colspan='4'>Totals</th>
-                          <th>{$totalWeight} lbs</th>
-                          <th colspan='2'>$" . number_format($totalPrice, 2) . "</th>
-                      </tr>
-                  </tfoot>
-                </table>";
-        else:
-            // Display message if the cart is empty
-            echo "<p>Your cart is empty.</p>";
-        endif;
-        
+        // Redirect back to the cart page to reflect changes
+        header("Location: https://students.cs.niu.edu/~z2003741/476/Cart.php");
+        exit;  // Ensure no further code is executed after the redirect
     } catch (PDOException $e) {
-        // Handle database connection errors
-        echo "<p>Connection to database failed: " . htmlspecialchars($e->getMessage()) . "</p>";
-        exit;
+        // Handle errors during the deletion process
+        echo "<p>Error removing the item: " . htmlspecialchars($e->getMessage()) . "</p>";
     }
-    ?>
+}
 
-    <h2>Billing Information</h2>
+?>
+
+<h2>Billing Information</h2>
     <!-- Billing Form -->
     <form method="post" action="process_billing.php">
         <div class="billing-section">
