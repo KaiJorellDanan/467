@@ -1,15 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
     <style> 
-        table, th, td
+        body
         {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            background-color: #16171f;
+        }
+        table
+        {
+            border-collapse: collapse;
             text-align: center;
             table-layout: fixed;
-            td 
-            { 
-                width: 10%;
-                font-weight: normal; 
-            }
+            margin: 20px 0;
+            width: 35%;
+        }
+        .center
+        {
+            height: 25vh;
+            width: 100vw;
+            display: grid;
+            place-items: center;
+        }
+        th, td 
+        {
+            border: 1px solid #ffffff; 
+            padding: 10px; 
+            text-align: center; 
+        }
+        h1, h2 
+        {
+            margin: 10px 0;
+            text-align: center;
+        }
+        button
+        {
+            cursor: pointer;
+            background-color: #2471a3;
+        }
+        button:hover
+        {
+            background-color: #ebf5fb;
+        }
+        form
+        {
+            text-align: center;
         }
     </style>
     <head>
@@ -57,9 +95,10 @@
     <body>
         <h1>Administration</h1>
         <h2>Car Parts Administration</h2>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Orders.php';">Orders</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Admin_Orders.php';">Orders</button>
         <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Administration.php';">Weight Brackets</button>
         <h3>Weight brackets to calculate shipping cost:<h3>
+        <div class="center">
 
         <?php
             $sql = "SELECT * FROM Shipping_cost
@@ -113,6 +152,7 @@
             echo "</table>";
         ?>
 
+        <div>
         <br>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             Weight: <input type="text" name="new_weight">
