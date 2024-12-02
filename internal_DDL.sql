@@ -27,7 +27,7 @@ CREATE TABLE Orders
 (
     order_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT NOT NULL,
-    order_status VARCHAR(20),
+    order_status VARCHAR(20) DEFAULT 'UNFULFILLED',
     order_date DATE,
     price FLOAT(8,2),
     order_weight FLOAT(8,2),
