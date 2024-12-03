@@ -2,67 +2,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    margin: 20px;
-    background-color: #f9f9f9;
-    color: #333;
-}
+    /* General Body Styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        background-color: #f4f7fc;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+    }
 
-.info, .error {
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
+    /* Info and Error Message Styling */
+    .info, .error {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 600px;
+        text-align: center;
+    }
 
-.info {
-    background-color: #d9edf7;
-    color: #31708f;
-}
+    .info {
+        background-color: #d9f7d9;
+        color: #388e3c;
+    }
 
-.error {
-    background-color: #f2dede;
-    color: #a94442;
-}
+    .error {
+        background-color: #fce4e4;
+        color: #c62828;
+    }
 
-.cart-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
+    /* Cart Table Styling */
+    .cart-table {
+        width: 80%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-.cart-table th, .cart-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-}
+    .cart-table th, .cart-table td {
+        border: 1px solid #ddd;
+        padding: 15px;
+        text-align: center;
+        font-size: 16px;
+        vertical-align: middle;
+    }
 
-.cart-table th {
-    background-color: #f4f4f4;
-}
+    .cart-table th {
+        background-color: #f1f1f1;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-.cart-table img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-}
+    .cart-table td {
+        background-color: #fff;
+    }
 
-button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
+    /* Image Styling in Cart */
+    .cart-table img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
 
-button:hover {
-    background-color: #218838;
-}
+    /* Button Styling */
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+    }
 
+    button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    /* Remove Button Styling */
+    .remove-button {
+        background-color: #f44336;
+        padding: 6px 12px;
+        font-size: 14px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+
+    .remove-button:hover {
+        background-color: #c62828;
+        transform: scale(1.1);
+    }
+
+    /* Focus Styling for Input Fields */
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    /* Form Layout */
+    form {
+        width: 80%;
+        max-width: 600px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    form h2 {
+        font-size: 28px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .cart-table {
+            width: 100%;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+        }
+
+        form {
+            width: 90%;
+            padding: 20px;
+        }
+    }
 </style>
+
 </head>
+
 
 <?php
 session_start();
@@ -126,7 +230,7 @@ try {
     $totalWeight = 0;
 
     // Generate the cart table
-    echo "<table>
+    echo "<table class='cart-table'>
             <thead>
                 <tr>
                     <th>Item ID</th>
@@ -135,7 +239,6 @@ try {
                     <th>Quantity</th>
                     <th>Weight (lbs)</th>
                     <th>Price ($)</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>";
@@ -149,11 +252,11 @@ try {
         // Output table row for each item
         echo "<tr>
                 <td>{$item['item_id']}</td>
-                <td><img src='" . htmlspecialchars($item['pictureURL']) . "' alt='Item Image' style='width:50px;height:50px;'></td>
+                <td><img src='" . htmlspecialchars($item['pictureURL']) . "' alt='Item Image'></td>
                 <td>" . htmlspecialchars($item['description']) . "</td>
                 <td>" . htmlspecialchars($item['customerq']) . "</td>
                 <td>" . htmlspecialchars($item['qweight']) . " lbs</td>
-                <td>$" . number_format($item['price'], 2) . "</td>
+                <td>$" . number_format($itemTotalPrice, 2) . "</td>
                 <td>
                     <!-- Form to remove item from cart -->
                     <form method='post' action='Cart.php'>
@@ -198,7 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
         }
 
         // Redirect back to the cart page to reflect changes
-        header("Location: https://students.cs.niu.edu/~z2003741/476/Cart.php");
+        header("Location: Cart.php");
         exit;  // Ensure no further code is executed after the redirect
     } catch (PDOException $e) {
         // Handle errors during the deletion process
@@ -206,37 +309,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['item_id'])) {
     }
 }
 
+// Check if the Billing form was submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['address']) && isset($_POST['cc']) && isset($_POST['exp'])) {
+    // Sanitize and prepare form data
+    $firstName = htmlspecialchars($_POST['first_name']);  // Get the correct input names here
+    $lastName = htmlspecialchars($_POST['last_name']);
+    $email = htmlspecialchars($_POST['email']);
+    $address = htmlspecialchars($_POST['address']);
+    $cc = htmlspecialchars($_POST['cc']);  // You may want to encrypt this for security reasons
+    $exp = htmlspecialchars($_POST['exp']);  // Expiration Date (MM/YY)
+
+    try {
+        // Insert the customer data into the Customer table
+        $stmt = $pdo2->prepare("INSERT INTO Customer (first_name, last_name, email, address) VALUES (:first_name, :last_name, :email, :address)");
+        $stmt->bindParam(':first_name', $firstName);
+        $stmt->bindParam(':last_name', $lastName);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':address', $address);
+
+        if ($stmt->execute()) {
+            echo "<p>Customer details submitted successfully.</p>";
+        } else {
+            echo "<p>Failed to submit customer details.</p>";
+            exit;
+        }
+
+        // Get the customer_id of the newly inserted customer
+        $customer_id = $pdo2->lastInsertId();
+
+        // Calculate the total price and weight from the cart
+        $totalPrice = 0;
+        $totalWeight = 0;
+
+        foreach ($mergedData as $item) {
+            $itemTotalPrice = $item['price'] * $item['customerq'];
+            $totalPrice += $itemTotalPrice;
+            $totalWeight += $item['qweight'];
+        }
+
+        // Insert the order into the Orders table
+        $stmt2 = $pdo2->prepare("INSERT INTO Orders (customer_id, order_status, order_date, price, order_weight) 
+                                 VALUES (:customer_id, 'UNFULFILLED', CURDATE(), :price, :weight)");
+        $stmt2->bindParam(':customer_id', $customer_id);
+        $stmt2->bindParam(':price', $totalPrice);
+        $stmt2->bindParam(':weight', $totalWeight);
+
+        if ($stmt2->execute()) {
+            echo "<p>Order placed successfully.</p>";
+        } else {
+            echo "<p>Failed to place the order.</p>";
+        }
+
+        
+
+
+        exit;
+    } catch (PDOException $e) {
+        // Handle errors during the insertion process
+        echo "<p>Error: " . htmlspecialchars($e->getMessage()) . "</p>";
+    }
+}
 ?>
 
-<h2>Billing Information</h2>
-    <!-- Billing Form -->
-    <form method="post" action="process_billing.php">
-        <div class="billing-section">
-            <!-- Customer Name -->
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
 
-            <!-- Customer Email -->
-            <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email" required>
 
-            <!-- Billing Address -->
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required>
+<<h2>Billing Information</h2>
+<form method="post" action="Cart.php">
+    <div class="billing-section">
 
-            <!-- Credit Card Number -->
-            <label for="cc">Credit Card Number:</label>
-            <input type="number" id="cc" name="cc" required>
+        <!-- Customer Name -->
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required>
+        
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required>
 
-            <!-- Credit Card Expiration Date -->
-            <label for="exp">Expiration Date:</label>
-            <input type="text" id="exp" name="exp" placeholder="MM/YY" required>
-        </div>
+        <!-- Customer Email -->
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required>
 
-        <!-- Submit Payment Button -->
-        <button type="submit">Submit Payment</button>
-    </form>
-</div>
+        <!-- Billing Address -->
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required>
+
+        <!-- Credit Card Number -->
+        <label for="cc">Credit Card Number:</label>
+        <input type="number" id="cc" name="cc" required>
+
+        <!-- Credit Card Expiration Date -->
+        <label for="exp">Expiration Date:</label>
+        <input type="text" id="exp" name="exp" placeholder="MM/YY" required>
+    </div>
+
+    <!-- Submit Payment Button -->
+    <button type="submit">Submit Payment</button>
+</form>
+
 
 </body>
 </html>
