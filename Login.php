@@ -9,44 +9,92 @@
         {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             height: 100vh; 
             margin: 0;
-            background-image: url(https://wallpapercave.com/wp/wp2757874.gif);
+            background-image: url(https://wallpapercave.com/wp/wp10596294.jpg);
             background-position: center;
-            background-repeat:center;
-            background-size: 100%;
-            color: #ffffff;
+            background-repeat: no-repeat;
+            background-size: 110%;
+            color: #ee4b2b;
         }
-        .boarder
+        .group
         {
-            border: 5px solid #000;
-            border-radius: 10px;
             padding: 100px;
-            text-align: center;
-            background color: #000;
+            text-align: left;
+            margin: 20px
         }
         h1 
         {
-            font-size: 3em;
+            font-size: 85px;
+            font-family: 'Oswald', sans-serif;
             margin-bottom: 20px;
         }
         p 
         {
-            font-size: 1.5;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
             margin-bottom: 20px;
         }
         button 
         {
             padding: 10px 20px;
             font-size: 16px;
+            font-family: 'Roboto', sans-serif;
             cursor: pointer;
-            background-color: #2471a3;
+            background-color: #ee4b2b;
         }
         button:hover
         {
             background-color: #ebf5fb;
+        }
+        .gifBox
+        {
+            position: absolute;
+            top: 200px;
+            right: 50px;
+            text-align: center;
+        }
+        .topGif 
+        {
+            width: 500px; 
+            height: auto;
+        }
+        .gifText 
+        {
+            font-size: 18px;
+            font-family: 'Roboto', sans-serif;
+            color: #ee4b2b;
+            margin-top: 10px;
+        }
+        .footer
+        {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #16171f;
+            text-align: center;
+            padding: 5px 0;
+            color: #ee4b2b;
+            display: flex;                
+            justify-content: space-evenly;  
+            gap: 25px;
+        }
+        .footer p
+        {
+            display: inline-block;
+            font-size: 20px;
+            font-family: 'Roboto', sans-serif;
+        }
+        .footer p.one
+        {
+            font-size: 20px;
+            font-family: 'Roboto', sans-serif;
+        }
+        .footer p.two
+        {
+            font-size: 20px;
+            font-family: 'Roboto', sans-serif;
         }
     </style>
     <?php
@@ -87,14 +135,25 @@
     ?>
 </head>
 <body>
-    <div class="boarder">
-    <h1>Welcome to Our Store 🛒</h1>
-    <p>Click the button below to start shopping!</p>
+    <div class="group">
+    <h1>Welcome To RevTech Garage</h1>
+    <p>Browse through over 100 different parts and vehicles!</p>
 
     <!-- Button to redirect to CustomerSystem.php -->
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <button type="submit" name="start" value="clicked">Start Shopping</button>
+        <button type="submit" name="start" value="clicked">Explore More</button>
     </form>
     <div>
+
+    <div class="gifBox">
+        <img src="https://media.ford.com/content/dam/fordmedia/North%20America/US/2017/09/21/HoloLensLoop.gif" alt="Image" class="topGif">
+        <p class="gifText">RevTech Garage any part for any vehicle!</p>
+    </div>
+
+    <div class="footer">
+        <p>🚚💨Free Shipping and Handling</p> 
+        <p class="one">🤝 24/7 Customer Support</p>
+        <p class="two">🔙Easy Returns</p>
+    </div>
 </body>
 </html>
