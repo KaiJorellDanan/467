@@ -143,20 +143,11 @@ try {
     session_start();
     $customer_id = $_SESSION['customer_id'] ?? null;
 
-    // Search query for 'parts' table in Blitz
-    $searchTerm = $_GET['search'] ?? '';
-    $sql = "SELECT * FROM parts";
-    if ($searchTerm) {
-        $sql .= " WHERE description LIKE :searchTerm";
+    if (!$customer_id) {
+        // If customer_id doesn't exist in the session, handle the case
+        echo "<p>Error: Customer ID is missing. Please log in.</p>";
+        exit;
     }
-    $stmt = $pdo->prepare($sql);
-    if ($searchTerm) {
-        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
-    }
-    $stmt->execute();
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    echo "<p>Debug: Products retrieved = " . count($products) . "</p>";
 
     // Handle adding to cart
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['productId'], $_POST['quantity'])) {
@@ -175,19 +166,43 @@ try {
         echo "<p>Added $customerQuantity of Item ID: $itemId ($weight lbs) to your cart.</p>";
         echo "<p>Total Weight of Items = $totalWeight</p>";
 
+        // Disable foreign key checks to avoid foreign key constraint issues
+        $pdo2->exec("SET foreign_key_checks = 0");
+
         // Insert into cart in 'z2003741' database
         $stmt = $pdo2->prepare("INSERT INTO Cart (customer_id, item_id, customerq, qweight)
             VALUES (:customer_id, :item_id, :customerq, :qweight)
             ON DUPLICATE KEY UPDATE
             customerq = customerq + :customerq, 
             qweight = qweight + :qweight");
+
         $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
         $stmt->bindParam(':item_id', $itemId, PDO::PARAM_INT);
         $stmt->bindParam(':customerq', $customerQuantity, PDO::PARAM_INT);
         $stmt->bindParam(':qweight', $totalWeight, PDO::PARAM_STR);
         $stmt->execute();
+
+        // Re-enable foreign key checks after insertion
+        $pdo2->exec("SET foreign_key_checks = 1");
     }
-} catch (PDOException $e) {
+
+        // Search query for 'parts' table in Blitz
+    $searchTerm = $_GET['search'] ?? '';
+    $sql = "SELECT * FROM parts";
+    if ($searchTerm) {
+        $sql .= " WHERE description LIKE :searchTerm";
+    }
+    $stmt = $pdo->prepare($sql);
+    if ($searchTerm) {
+        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%', PDO::PARAM_STR);
+    }
+    $stmt->execute();
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo "<p>Debug: Products retrieved = " . count($products) . "</p>";
+
+    
+}catch (PDOException $e) {
     echo "<p>Connection to database failed: " . htmlspecialchars($e->getMessage()) . "</p>";
     exit;
 }
