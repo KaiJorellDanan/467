@@ -9,43 +9,49 @@
         {
             display: flex;
             flex-direction: column;
-            height: 100vh; 
+            height: 90vh; 
             margin: 0;
             background-image: url(https://wallpapercave.com/wp/wp10596294.jpg);
             background-position: center;
             background-repeat: no-repeat;
             background-size: 110%;
-            color: #ee4b2b;
+            color: #6D7C86; 
         }
         .group
         {
             padding: 100px;
             text-align: left;
-            margin: 20px
+            margin: 20px;
+            color: #52616E; 
         }
         h1 
         {
             font-size: 85px;
-            font-family: 'Oswald', sans-serif;
+            font-family: 'Abril Fatface', serif;
             margin-bottom: 20px;
+            color: #3F4A51; 
         }
         p 
         {
-            font-size: 16px;
-            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            font-family: 'Lato', sans-serif;
             margin-bottom: 20px;
+            color: #89A2B8; 
         }
         button 
         {
             padding: 10px 20px;
             font-size: 16px;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Lato', sans-serif;
             cursor: pointer;
-            background-color: #ee4b2b;
+            background-color: #3F4A51; 
+            color: white;
+            border: none;
+            border-radius: 5px;
         }
         button:hover
         {
-            background-color: #ebf5fb;
+            background-color: #52616E; 
         }
         .gifBox
         {
@@ -62,8 +68,8 @@
         .gifText 
         {
             font-size: 18px;
-            font-family: 'Roboto', sans-serif;
-            color: #ee4b2b;
+            font-family: 'Lato', sans-serif;
+            color: #89A2B8; 
             margin-top: 10px;
         }
         .footer
@@ -75,7 +81,7 @@
             background-color: #16171f;
             text-align: center;
             padding: 5px 0;
-            color: #ee4b2b;
+            color: #6D7C86; 
             display: flex;                
             justify-content: space-evenly;  
             gap: 25px;
@@ -83,18 +89,22 @@
         .footer p
         {
             display: inline-block;
+            margin-right: 150px;
             font-size: 20px;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Lato', sans-serif;
+            color: #89A2B8; 
         }
         .footer p.one
         {
             font-size: 20px;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Lato', sans-serif;
+            color: #89A2B8; 
         }
         .footer p.two
         {
             font-size: 20px;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Lato', sans-serif;
+            color: #89A2B8;
         }
     </style>
     <?php
@@ -151,9 +161,9 @@
     </div>
 
     <div class="footer">
-        <p>🚚💨Free Shipping and Handling</p> 
+        <p>🚚💨Free Shipping and Handling On Most Orders Over $250*</p> 
         <p class="one">🤝 24/7 Customer Support</p>
-        <p class="two">🔙Easy Returns</p>
+        <p class="two">✉️Subscribe for Rewards! </p>
     </div>
 </body>
 </html>
