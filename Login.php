@@ -62,14 +62,14 @@
         .gifBox
         {
             position: absolute;
-            top: 200px;
-            right: 50px;
+            top: 25px;
+            right: 25px;
             text-align: center;
         }
 
         .topGif 
         {
-            width: 500px; 
+            width: 250px; 
             height: auto;
         }
 
@@ -79,44 +79,6 @@
             font-family: 'Lato', sans-serif;
             color: #89A2B8; 
             margin-top: 10px;
-        }
-
-        .footer
-        {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #16171f;
-            text-align: center;
-            padding: 5px 0;
-            color: #6D7C86; 
-            display: flex;                
-            justify-content: space-evenly;  
-            gap: 25px;
-        }
-
-        .footer p
-        {
-            display: inline-block;
-            margin-right: 150px;
-            font-size: 20px;
-            font-family: 'Lato', sans-serif;
-            color: #89A2B8; 
-        }
-
-        .footer p.one
-        {
-            font-size: 20px;
-            font-family: 'Lato', sans-serif;
-            color: #89A2B8; 
-        }
-        
-        .footer p.two
-        {
-            font-size: 20px;
-            font-family: 'Lato', sans-serif;
-            color: #89A2B8;
         }
     </style>
     <?php
@@ -172,10 +134,5 @@
         <p class="gifText">RevTech Garage any part for any vehicle!</p>
     </div>
 
-    <div class="footer">
-        <p>🚚💨Free Shipping and Handling On Most Orders Over $250*</p> 
-        <p class="one">🤝 24/7 Customer Support</p>
-        <p class="two">✉️Subscribe for Rewards! </p>
-    </div>
 </body>
 </html>
