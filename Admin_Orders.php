@@ -1,16 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
     <style> 
-        table, th, td
+        body 
         {
-            text-align: center;
-            table-layout: fixed;
-            td 
-            { 
-                width: 10%;
-                font-weight: normal; 
-            }
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff; 
+            background-color: #3f4a51ff; 
         }
+
+        table 
+        {
+            border-collapse: collapse;
+            text-align: center;
+            font-family: 'Lato', sans-serif;
+            table-layout: fixed;
+            margin: 20px 0;
+            width: 35%; 
+            border: 1px solid #89a2b8ff; 
+        }
+
+        h1, h2
+        {
+            margin: 10px 0; 
+            font-family: 'Abril Fatface', serif;
+            text-align: center; 
+        }
+        
+        th, td 
+        {
+            border: 1px solid #89a2b8ff; 
+            padding: 20px; 
+            text-align: center; 
+            font-family: 'Lato', sans-serif;
+        }
+
+        button 
+        {
+            padding: 5px 10px;
+            font-size: 16px;
+            font-family: 'Lato', sans-serif;
+            cursor: pointer;
+            background-color: #52616eff;  
+            color: #ffffff;
+        }
+
+        button:hover
+        {
+            background-color: #6d7c86ff; 
+        }
+
     </style>
     <head>
         <meta charset="UTF-8">
