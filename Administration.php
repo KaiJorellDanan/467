@@ -28,24 +28,27 @@
             display: grid;
             place-items: center;
         }
+        
+        h1, h2 
+        {
+            font-family: 'Abril Fatface', serif;
+            margin: 10px 0;
+            text-align: center;
+        }
 
         th, td 
         {
             border: 1px solid #89a2b8ff; 
             padding: 20px; 
             text-align: center; 
-        }
-
-        h1, h2 
-        {
-            margin: 10px 0;
-            text-align: center;
+            font-family: 'Lato', sans-serif;
         }
 
         button 
         {
             cursor: pointer;
             background-color: #52616eff; 
+            font-family: 'Lato', sans-serif;
         }
 
         button:hover 
