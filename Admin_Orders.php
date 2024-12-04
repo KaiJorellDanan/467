@@ -95,8 +95,8 @@
     <body>
         <h1>Administration</h1>
         <h2>Car Parts Administration</h2>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Admin_Orders.php';">Orders</button>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Administration.php';">Weight Brackets</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Admin_Orders.php';">Orders</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Administration.php';">Weight Brackets</button>
         <h3>List of Orders<h3>
 
         <?php
