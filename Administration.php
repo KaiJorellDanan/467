@@ -1,54 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
     <style> 
-        body
+        body 
         {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #ffffff;
-            background-color: #16171f;
+            color: #ffffff; 
+            background-color: #3f4a51ff; 
         }
-        table
+
+        table 
         {
             border-collapse: collapse;
             text-align: center;
             table-layout: fixed;
             margin: 20px 0;
-            width: 35%;
+            width: 35%; 
+            border: 1px solid #89a2b8ff; 
         }
-        .center
+
+        .center 
         {
             height: 25vh;
             width: 100vw;
             display: grid;
             place-items: center;
         }
+
         th, td 
         {
-            border: 1px solid #ffffff; 
-            padding: 10px; 
+            border: 1px solid #89a2b8ff; 
+            padding: 20px; 
             text-align: center; 
         }
+
         h1, h2 
         {
             margin: 10px 0;
             text-align: center;
         }
-        button
+
+        button 
         {
             cursor: pointer;
-            background-color: #2471a3;
+            background-color: #52616eff; 
         }
-        button:hover
+
+        button:hover 
         {
-            background-color: #ebf5fb;
+            background-color: #6d7c86ff; 
         }
-        form
+
+        form 
         {
             text-align: center;
         }
+
     </style>
     <head>
         <meta charset="UTF-8">
@@ -58,13 +67,12 @@
             $username = "z1952360";
             $password = "2004May03";
             try 
-            { // if something goes wrong, an exception is thrown
-                
+            { 
                 $dsn = "mysql:host=courses;dbname=z1952360";
                 $pdo = new PDO($dsn, $username, $password);
             }
             catch(PDOexception $e) 
-            { // handle that exception
+            { 
                 echo "Connection to database failed: " . $e->getMessage();
             }
 
@@ -95,9 +103,9 @@
     <body>
         <h1>Administration</h1>
         <h2>Car Parts Administration</h2>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Orders.php';">Orders</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Admin_Orders.php';">Orders</button>
         <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Administration.php';">Weight Brackets</button>
-        <h3>Weight brackets to calculate shipping cost:<h3>
+        <h3>Weight brackets to calculate shipping cost:</h3>
         <div class="center">
 
         <?php
@@ -109,6 +117,7 @@
             echo "<tr>"; 
             echo "<th>Weight Range</th>";
             echo "<th>Shipping Cost</th>";
+            echo "<th>Removal</th>";
             echo "</tr>";
 
             while ($row = $result->fetch()) 
