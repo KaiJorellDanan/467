@@ -49,6 +49,7 @@
             cursor: pointer;
             background-color: #52616eff; 
             font-family: 'Lato', sans-serif;
+            color: #ffffff;
         }
 
         button:hover 
