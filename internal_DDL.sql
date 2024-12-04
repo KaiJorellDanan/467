@@ -6,7 +6,7 @@ DROP TABLE Inventory;
 
 CREATE TABLE Customer
 (
-    customer_id INT NOT NULL AUTO_INCREMENT,
+    customer_id INT NOT NULL,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     email VARCHAR(50),
