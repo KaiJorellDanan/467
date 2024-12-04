@@ -8,34 +8,34 @@
             justify-content: center;
             align-items: center;
             color: #ffffff; 
-            background-color: #16171f;
+            background-color: #3f4a51ff; 
         }
         table
         {
-            border: 1px solid #ffffff; 
+            border: 1px solid #89a2b8ff; 
             border-collapse: collapse; 
             margin: 20px 0; 
             width: 80%; 
-        }
-        th, td 
-        {
-            border: 1px solid #ffffff; 
-            padding: 10px; 
-            text-align: center; 
         }
         h1, h2
         {
             margin: 10px 0; 
             text-align: center; 
         }
+        th, td 
+        {
+            border: 1px solid #89a2b8ff;  
+            padding: 10px; 
+            text-align: center; 
+        }
         button
         {
             cursor: pointer;
-            background-color: #2471a3;
+            background-color: #52616eff;  
         }
         button:hover
         {
-            background-color: #ebf5fb;
+            background-color: #6d7c86ff;  
         }
     </style>
     <head>
@@ -104,8 +104,8 @@
     <body>
         <h1>Receiving Warehouse</h1>
         <h2>Car Parts Warehouse</h2>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467Receiving.php';">Orders</button>
-        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Receiving.php';">Receiving</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818/csci467/Receiving.php';">Orders</button>
+        <button onclick="window.location.href='https://students.cs.niu.edu/~z1949818//csci467/Receiving.php';">Receiving</button>
         <form method="post">
             Search by Description: <input type="text" name="search">
             <button type="submit">Search</button>
