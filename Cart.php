@@ -1,18 +1,20 @@
 <body>
+    
     <!-- Include JavaScript and CSS -->
     <script src="CARTJS.js" defer></script>
     <?php
     include 'CartCSS.css';
     session_start();
 
-    // Retrieve customer ID from session
-    $customer_id = $_SESSION['customer_id'] ?? null;
-
-    // Check if customer ID is available
-    if (!$customer_id) {
-        echo "<p>No customer ID found. Please log in or start shopping first.</p>";
-        exit;
+    if (isset($_SESSION['customer_id'])) {
+        $customer_id = $_SESSION['customer_id'];
+        echo "<p>Customer ID retrieved from session: $customer_id</p>";
+    } else {
+        echo "<p>Error: Customer ID not found in session!</p>";
+        exit; // Stop further execution if customer_id isn't available
     }
+    
+    print_r($_SESSION);
 
     // Database connection credentials
     $username = "z2003741";
@@ -62,9 +64,25 @@
             }
         }
 
-        // Initialize totals
-        $totalPrice = 0;
-        $totalWeight = 0;
+            // Initialize totals
+    $totalPrice = 0;
+    $totalWeight = 0;
+
+    foreach ($mergedData as $item) {
+        // Ensure item price and quantity are valid
+        $itemPrice = $item['price'];
+        $itemQuantity = $item['customerq'];
+        $itemWeight = $item['qweight'];
+
+        // Calculate total price and total weight for each item
+        $itemTotalPrice = $itemPrice * $itemQuantity; // price * quantity
+        $itemTotalWeight = $itemWeight * $itemQuantity; // weight * quantity
+
+        $totalPrice += $itemTotalPrice;
+        $totalWeight += $itemTotalWeight; // Accumulate total weight
+    }
+
+            
 
     } catch (PDOException $e) {
         // Handle database connection errors
@@ -96,7 +114,7 @@
 
     // Step 1: Validate Credit Card via RESTful API
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['address']) && isset($_POST['cc']) && isset($_POST['exp'])) {
-
+    
     // Sanitize and prepare form data
     $firstName = htmlspecialchars($_POST['first_name']);
     $lastName = htmlspecialchars($_POST['last_name']);
@@ -104,8 +122,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isse
     $address = htmlspecialchars($_POST['address']);
     $cc = htmlspecialchars($_POST['cc']);
     $exp = htmlspecialchars($_POST['exp']);
-    $totalPrice = 654.32; // Example price, you can replace with actual calculation
-
     // Randomize 'vendor' and 'trans'
     $vendor = 'VE001-' . str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT); // Random vendor in format VE001-XX
     $trans = '907-' . str_pad(rand(100000000, 999999999), 9, '0', STR_PAD_LEFT) . '-' . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT); // Random transaction
@@ -136,7 +152,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isse
     if (strpos($result, 'Error') === 0) {
         echo "<p>Faulty credit card.</p>";
         exit; // Stop further processing if card is invalid
-    } else {
+    } 
+
+    // Step 2: Insert Customer Data into the Customer Table
+    try {
+        $pdoLocal = new PDO('mysql:host=courses;dbname=z2003741', $username, $password );
+        $stmt = $pdoLocal->prepare("INSERT INTO Customer (customer_id,first_name, last_name, email, address) VALUES (:customer_id,:first_name, :last_name, :email, :address)");
+        $stmt->bindParam(':customer_id', $customer_id);
+        $stmt->bindParam(':first_name', $firstName);
+        $stmt->bindParam(':last_name', $lastName);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':address', $address);
+        $stmt->execute();
+
+       
+        echo "<p>Customer ID $customer_id inserted successfully!</p>";
+
+    } catch (PDOException $e) {
+        echo "<p>Error inserting customer data: " . htmlspecialchars($e->getMessage()) . "</p>";
+        exit; // Exit if there's an error inserting the customer data
+    }
+
+    // Step 3: Insert Order Data into the Order Table
+    try {
+        $orderStmt = $pdoLocal->prepare("INSERT INTO `Orders` (customer_id, price, order_date, order_weight) 
+        VALUES (:customer_id, :price, NOW(), :order_weight)");
+        $orderStmt->bindParam(':customer_id', $customer_id);
+        $orderStmt->bindParam(':price', $totalPrice); // Pass the correct calculated totalPrice here
+        $orderStmt->bindParam(':order_weight', $totalWeight); // Same for totalWeight
+        $orderStmt->execute();
+
+        // Optionally, insert individual order items into an order_items table, if needed
+        echo "<p>Order placed successfully for customer $customer_id!</p>";
         $orderNumber = $pdoLocal->lastInsertId(); // Retrieve the last inserted order ID
         $AUTHNUM = rand(100, 900); // Random authorization number
         $totalPrice = number_format($totalPrice, 2); // Format the total price
@@ -150,37 +197,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isse
                     openModal('$orderNumber', '$totalPrice', '$AUTHNUM', '$fullName', '$email');
                 }
               </script>";
-    }
-
-    // Step 2: Insert Customer Data into the Customer Table
-    try {
-        $pdoLocal = new PDO('mysql:host=courses;dbname=z2003741', $username, $password );
-        $stmt = $pdoLocal->prepare("INSERT INTO Customer (first_name, last_name, email, address) VALUES (:first_name, :last_name, :email, :address)");
-        $stmt->bindParam(':first_name', $firstName);
-        $stmt->bindParam(':last_name', $lastName);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':address', $address);
-        $stmt->execute();
-
-        // Get the customer_id of the newly inserted customer
-        $customer_id = $pdoLocal->lastInsertId();
-        echo "<p>Customer ID $customer_id inserted successfully!</p>";
-
-    } catch (PDOException $e) {
-        echo "<p>Error inserting customer data: " . htmlspecialchars($e->getMessage()) . "</p>";
-        exit; // Exit if there's an error inserting the customer data
-    }
-
-    // Step 3: Insert Order Data into the Order Table
-    try {
-        $orderStmt = $pdoLocal->prepare("INSERT INTO `Orders` (customer_id, price, order_date) VALUES (:customer_id, :price, NOW())");
-        $orderStmt->bindParam(':customer_id', $customer_id);
-        $orderStmt->bindParam(':price', $totalPrice);
-        $orderStmt->execute();
-
-        // Optionally, insert individual order items into an order_items table, if needed
-        echo "<p>Order placed successfully for customer $customer_id!</p>";
-
         
     } catch (PDOException $e) {
         echo "<p>Error inserting order data: " . htmlspecialchars($e->getMessage()) . "</p>";
@@ -202,51 +218,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isse
         </div>
     </div>
 
-    <!-- Shopping Cart -->
     <div class="cart">
-        <?php if ($mergedData): ?>
-            <!-- Start the table for the cart -->
-            <table class="cart-table">
-                <tbody>
-                    <?php foreach ($mergedData as $item): ?>
-                        <?php
-                        // Calculate total price and total weight for each item
-                        $itemTotalPrice = $item['price'] * $item['customerq'];
-                        $totalPrice += $itemTotalPrice;
-                        $totalWeight += $item['qweight'];
-                        ?>
-                        <!-- Output table row for each item -->
-                        <tr>
-                            <td><?php echo htmlspecialchars($item['item_id']); ?></td>
-                            <td><img src="<?php echo htmlspecialchars($item['pictureURL']); ?>" alt="Item Image" class="item-image"></td>
-                            <td><?php echo htmlspecialchars($item['description']); ?></td>
-                            <td><?php echo htmlspecialchars($item['customerq']); ?></td>
-                            <td><?php echo htmlspecialchars($item['qweight']); ?> lbs</td>
-                            <td>$<?php echo number_format($itemTotalPrice, 2); ?></td>
-                            <td>
-                                <!-- Form to remove item from cart -->
-                                <form method="post" action="Cart.php">
-                                    <input type="hidden" name="action" value="remove_item">
-                                    <input type="hidden" name="item_id" value="<?php echo htmlspecialchars($item['item_id']); ?>">
-                                    <button type="submit">Remove</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                    <!-- Output totals row -->
-                    <tr>
-                        <th colspan="4">Totals</th>
-                        <th><?php echo htmlspecialchars($totalWeight); ?> lbs</th>
-                        <th colspan="2">$<?php echo number_format($totalPrice, 2); ?></th>
-                    </tr>
-                </tfoot>
-            </table>
-        <?php else: ?>
-            <p>Your cart is empty.</p>
-        <?php endif; ?>
-    </div>
+    <?php if ($mergedData): ?>
+        <!-- Start the table for the cart -->
+        <table class="cart-table">
+            <tbody>
+        <?php foreach ($mergedData as $item): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($item['item_id']); ?></td>
+                <td><img src="<?php echo htmlspecialchars($item['pictureURL']); ?>" alt="Item Image" class="item-image"></td>
+                <td><?php echo htmlspecialchars($item['description']); ?></td>
+                <td><?php echo htmlspecialchars($item['customerq']); ?></td>
+                <td><?php echo htmlspecialchars($item['qweight']); ?> lbs</td>
+                <td>$<?php echo number_format($item['price'] ,2); ?></td>
+                <td>
+                    <form method="post" action="Cart.php">
+                        <input type="hidden" name="action" value="remove_item">
+                        <input type="hidden" name="item_id" value="<?php echo htmlspecialchars($item['item_id']); ?>">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <!-- Output totals row -->
+                <tr>
+                    <th colspan="4">Totals</th>
+                    <th><?php echo htmlspecialchars($totalWeight); ?> lbs</th>
+                    <th colspan="2">$<?php echo number_format($totalPrice, 2); ?></th>
+                </tr>
+            </tfoot>
+        </table>
+    <?php else: ?>
+        <p>Your cart is empty.</p>
+    <?php endif; ?>
+</div>
+
 
     <!-- Billing Information -->
     <h2>Billing Information</h2>
