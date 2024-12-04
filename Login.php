@@ -17,6 +17,7 @@
             background-size: 110%;
             color: #6D7C86; 
         }
+
         .group
         {
             padding: 100px;
@@ -24,6 +25,7 @@
             margin: 20px;
             color: #52616E; 
         }
+
         h1 
         {
             font-size: 85px;
@@ -31,6 +33,7 @@
             margin-bottom: 20px;
             color: #3F4A51; 
         }
+
         p 
         {
             font-size: 20px;
@@ -38,6 +41,7 @@
             margin-bottom: 20px;
             color: #89A2B8; 
         }
+
         button 
         {
             padding: 10px 20px;
@@ -49,10 +53,12 @@
             border: none;
             border-radius: 5px;
         }
+
         button:hover
         {
             background-color: #52616E; 
         }
+
         .gifBox
         {
             position: absolute;
@@ -60,11 +66,13 @@
             right: 50px;
             text-align: center;
         }
+
         .topGif 
         {
             width: 500px; 
             height: auto;
         }
+
         .gifText 
         {
             font-size: 18px;
@@ -72,6 +80,7 @@
             color: #89A2B8; 
             margin-top: 10px;
         }
+
         .footer
         {
             position: fixed;
@@ -86,6 +95,7 @@
             justify-content: space-evenly;  
             gap: 25px;
         }
+
         .footer p
         {
             display: inline-block;
@@ -94,12 +104,14 @@
             font-family: 'Lato', sans-serif;
             color: #89A2B8; 
         }
+
         .footer p.one
         {
             font-size: 20px;
             font-family: 'Lato', sans-serif;
             color: #89A2B8; 
         }
+        
         .footer p.two
         {
             font-size: 20px;
