@@ -7,7 +7,7 @@
     <style>
     /* General Body Styling */
     body {
-        font-family: 'Arial', cursive, sans-serif;
+        font-family: 'Lato', sans-serif;
         line-height: 2.0;
         margin: 20px;
         background-color: #3f4a51;
@@ -18,6 +18,7 @@
         justify-content: flex-start;
         min-height: 100vh;
         color: #000002;
+        font-weight: bold;
     }
 
     /* Info and Error Message Styling */
@@ -30,7 +31,7 @@
         max-width: 600px;
         text-align: center;
     }
-
+    /*I think I am gay guys */
     .info {
         background-color: #d9f7d9;
         color: #388e3c;
@@ -43,7 +44,8 @@
 
     /* Cart Table Styling */
     .cart-table {
-        width: 80%;
+        width: 250%;
+        margin-left: -300px;
         border-collapse: collapse;
         margin-top: 20px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -68,6 +70,9 @@
         background-color: #fff;
     }
 
+    h2{
+        font-size: 30px;
+    }
     /* Image Styling in Cart */
     .cart-table img {
         width: 60px;
