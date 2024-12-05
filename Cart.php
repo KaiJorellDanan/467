@@ -3,18 +3,17 @@
     <!-- Include JavaScript and CSS -->
     <script src="CARTJS.js" defer></script>
     <link rel="stylesheet" href="CartCSS.css">
+
     <?php
     session_start();
 
     if (isset($_SESSION['customer_id'])) {
         $customer_id = $_SESSION['customer_id'];
-        echo "<p>Customer ID retrieved from session: $customer_id</p>";
     } else {
         echo "<p>Error: Customer ID not found in session!</p>";
         exit; // Stop further execution if customer_id isn't available
     }
     
-    print_r($_SESSION);
 
     // Database connection credentials
     $username = "z2003741";
@@ -25,9 +24,9 @@
     try {
         // Establish database connections
 
-        $dsn1 = "mysql:host=courses;dbname=z2003741"; // z2003741 database z1952360 2004May03
+        $dsn1 = "mysql:host=courses;dbname=z2003741"; // z2003741 database
         $pdoLocal = new PDO($dsn1, $username, $password);
-        $pdoLocal->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+        $pdoLocal->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $dsn2 = "mysql:host=blitz.cs.niu.edu;dbname=csci467"; // Blitz database
         $pdoBlitz = new PDO($dsn2, $username1, $password1);
@@ -147,17 +146,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isse
 
     $context = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
+    $responseData = json_decode($result, true);
 
-    // Check response
-    if (strpos($result, 'Error') === 0) {
-        echo "<p>Faulty credit card.</p>";
-        exit; // Stop further processing if card is invalid
-    } 
+    
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        echo "<p>Error: Invalid response from credit card validation API.</p>";
+        exit;
+    }
+    
+    // Check if the 'errors' key exists and has content
+    if (isset($responseData['errors']) && !empty($responseData['errors'])) {
+        // Output the error messages
+        $errorMessages = implode(', ', $responseData['errors']);
+        echo "<p>Faulty credit card. Errors: $errorMessages</p>";
+        exit;
+    }
 
     // Step 2: Insert Customer Data into the Customer Table
     try {
         $pdoLocal = new PDO('mysql:host=courses;dbname=z2003741', $username, $password );
-        $stmt = $pdoLocal->prepare("INSERT INTO Customer (customer_id,first_name, last_name, email, address) VALUES (:customer_id,:first_name, :last_name, :email, :address)");
+        $stmt = $pdoLocal->prepare(" INSERT INTO Customer (customer_id,first_name, last_name, email, address) VALUES (:customer_id,:first_name, :last_name, :email, :address)");
         $stmt->bindParam(':customer_id', $customer_id);
         $stmt->bindParam(':first_name', $firstName);
         $stmt->bindParam(':last_name', $lastName);
