@@ -1,16 +1,18 @@
 <style>
     /* General Body Styling */
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Arial', cursive, sans-serif;
         line-height: 1.6;
         margin: 20px;
-        background-color: #f4f7fc;
+        background-color: #3f4a51;
         color: #333;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         min-height: 100vh;
+        color: #000002;
+        font-weight: bold;
     }
 
     /* Info and Error Message Styling */
@@ -71,7 +73,7 @@
 
     /* Button Styling */
     button {
-        background-color: #007bff;
+        background: #6d7c86;
         color: white;
         border: none;
         padding: 12px 25px;
@@ -83,7 +85,7 @@
     }
 
     button:hover {
-        background-color: #0056b3;
+        background: #89a2b8;
         transform: scale(1.05);
     }
 
