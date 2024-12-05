@@ -197,9 +197,9 @@ h1 {
         $weight = $itemData['weight'] ?? 0;
 
         $totalWeight = $weight * $customerQuantity;
-        echo "<p>Hello Customer $customer_id</p>";
-        echo "<p>Added $customerQuantity of Item ID: $itemId ($weight lbs) to your cart.</p>";
-        echo "<p>Total Weight of Items = $totalWeight</p>";
+        // echo "<p>Hello Customer $customer_id</p>";
+        // echo "<p>Added $customerQuantity of Item ID: $itemId ($weight lbs) to your cart.</p>";
+        // echo "<p>Total Weight of Items = $totalWeight</p>";
 
         // Insert into cart, handling duplicates
         $pdo2->exec("SET foreign_key_checks = 0");
