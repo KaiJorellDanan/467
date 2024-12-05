@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Catalog</title>
-    <head>
     <style>
-    body {
+   body {
     font-family: 'Arial', cursive, sans-serif;
     margin: 0;
     padding: 0;
@@ -158,11 +157,9 @@ h1 {
 .cart-button:hover {
     background: #89a2b8; /* Darker pink on hover */
 }
-
     </style>
 </head>
 
-<body>
 <body>
     <?php
     // Database connections
@@ -172,6 +169,7 @@ h1 {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    // Second database for inventory and cart
     $username2 = "z2003741";
     $password2 = "2003Jan28";
     $dsn2 = "mysql:host=courses;dbname=z2003741";
@@ -191,7 +189,7 @@ h1 {
         $itemId = $_POST['productId'];
         $customerQuantity = $_POST['quantity'];
 
-        // Fetch weight from Blitz database
+        // Get weight from Blitz database
         $stmt = $pdo->prepare("SELECT weight FROM parts WHERE number = :itemId");
         $stmt->bindParam(':itemId', $itemId, PDO::PARAM_INT);
         $stmt->execute();
@@ -203,15 +201,11 @@ h1 {
         echo "<p>Added $customerQuantity of Item ID: $itemId ($weight lbs) to your cart.</p>";
         echo "<p>Total Weight of Items = $totalWeight</p>";
 
-        // Insert into cart
+        // Insert into cart, handling duplicates
         $pdo2->exec("SET foreign_key_checks = 0");
-        $stmt = $pdo2->prepare("
-            INSERT INTO Cart (customer_id, item_id, customerq, qweight)
+        $stmt = $pdo2->prepare("INSERT INTO Cart (customer_id, item_id, customerq, qweight)
             VALUES (:customer_id, :item_id, :customerq, :qweight)
-            ON DUPLICATE KEY UPDATE
-            customerq = customerq + :customerq,
-            qweight = qweight + :qweight
-        ");
+            ON DUPLICATE KEY UPDATE customerq = customerq + :customerq, qweight = qweight + :qweight");
         $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
         $stmt->bindParam(':item_id', $itemId, PDO::PARAM_INT);
         $stmt->bindParam(':customerq', $customerQuantity, PDO::PARAM_INT);
@@ -233,6 +227,19 @@ h1 {
     $stmt->execute();
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
+
+    <div class="container">
+        <h1>Product Catalog</h1>
+        <!-- Cart Button -->
+            <a class="cart-button" href="Cart.php">Go to Cart</a>
+        <!-- Search Form -->
+        <div class="search-form">
+            <form method="get" action="">
+                <label for="search">Search by Description:</label>
+                <input type="text" id="search" name="search" value="<?php echo htmlspecialchars($searchTerm); ?>">
+                <button type="submit">Search</button>
+            </form>
+        </div>
 
         <!-- Product Catalog -->
         <div class="catalog">
