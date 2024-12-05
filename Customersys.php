@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Catalog</title>
     <style>
-        body {
+    body {
     font-family: 'Arial', cursive, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #3f4a51; /* Light peachy pink */
-    color: #333;
+    color: #000002;
+    font-weight: bold;
 }
 
 .container {
