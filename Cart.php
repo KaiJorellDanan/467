@@ -16,15 +16,15 @@
     
 
     // Database connection credentials
-    $username = "z2003741";
-    $password = "2003Jan28";
+    $username = "z1952360";
+    $password = "2004May03";
     $username1 = "student";
     $password1 = "student";
 
     try {
         // Establish database connections
 
-        $dsn1 = "mysql:host=courses;dbname=z2003741"; // z2003741 database
+        $dsn1 = "mysql:host=courses;dbname=z1952360"; // z1952360 database
         $pdoLocal = new PDO($dsn1, $username, $password);
         $pdoLocal->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -165,9 +165,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name']) && isse
 
     // Step 2: Insert Customer Data into the Customer Table
     try {
-        $pdoLocal = new PDO('mysql:host=courses;dbname=z2003741', $username, $password );
-        $stmt = $pdoLocal->prepare(" INSERT INTO Customer (customer_id,first_name, last_name, email, address) VALUES (:customer_id,:first_name, :last_name, :email, :address)");
-        $stmt->bindParam(':customer_id', $customer_id);
+        $pdoLocal = new PDO('mysql:host=courses;dbname=z1952360', $username, $password );
+        $stmt = $pdoLocal->prepare("UPDATE Customer
+                                    SET first_name = :first_name,
+                                        last_name = :last_name,
+                                        email = :email,
+                                        address = :address
+                                    WHERE customer_id = '$customer_id';");
+        
         $stmt->bindParam(':first_name', $firstName);
         $stmt->bindParam(':last_name', $lastName);
         $stmt->bindParam(':email', $email);
