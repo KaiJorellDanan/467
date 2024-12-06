@@ -113,7 +113,7 @@
                     ('$customer_id');";
             $pdo->exec($sql);
 
-            header("Location: https://students.cs.niu.edu/~z2003741/476/CustomerSystem.php");
+            header("Location: https://students.cs.niu.edu/~z1952360/CustomerSystem.php");
             exit; // Always use exit after a redirect to stop further script execution
         }
     ?>
