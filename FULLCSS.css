@@ -1,5 +1,4 @@
-<style>
-    /* General Body Styling */
+    /* General  */
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
@@ -13,7 +12,7 @@
         min-height: 100vh;
     }
 
-    /* Info and Error Message Styling */
+    /* Info and Error */
     .info, .error {
         padding: 15px;
         border-radius: 8px;
@@ -61,7 +60,7 @@
         background-color: #fff;
     }
 
-    /* Image Styling in Cart */
+    /* Image Styling */
     .cart-table img {
         width: 60px;
         height: 60px;
