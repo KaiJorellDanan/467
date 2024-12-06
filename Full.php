@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <h1>Fulfillment Page</h1>
-<?php
-include 'FullCSS.css';
+<link rel="stylesheet" href="FULLCSS.css">
 
+<button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Full.php';">Orders</button>
+<button onclick="window.location.href='https://students.cs.niu.edu/~z1952360/Receiving.php';">Receiving</button>
+
+<?php
 // Database connection credentials
-$username = "z2003741";
-$password = "2003Jan28";
+$username = "z1952360";
+$password = "2004May03";
 
 $username1 = "student";
 $password1 = "student";
 
 try {
     // Establish database connection
-    $dsn1 = "mysql:host=courses;dbname=z2003741"; // z2003741 database
+    $dsn1 = "mysql:host=courses;dbname=z1952360"; // z1952360 database
     $pdoLocal = new PDO($dsn1, $username, $password);
     $pdoLocal->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -32,6 +35,9 @@ try {
     foreach ($orders as $order) {
             $unfulfilled_order_ids[] = $order['order_id'];
     }
+
+    // Echo the unfulfilled order IDs
+    echo "<h3>Unfulfilled Order IDs:</h3>";
 
 // Check if orders are available
 if (empty($orders)) {
@@ -59,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'])) {
         }
 
         // Redirect back to the fulfillment page to reflect changes
-        header("Location: https://students.cs.niu.edu/~z2003741/476/Full.php?order_id=$order_id");
+        header("Location: https://students.cs.niu.edu/~z1952360/Full.php?order_id=$order_id");
         exit;  // Ensure no further code is executed after the redirect
     } catch (PDOException $e) {
         // Handle errors during the update process
