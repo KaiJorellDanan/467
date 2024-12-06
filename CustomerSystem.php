@@ -170,9 +170,9 @@ h1 {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Second database for inventory and cart
-    $username2 = "z2003741";
-    $password2 = "2003Jan28";
-    $dsn2 = "mysql:host=courses;dbname=z2003741";
+    $username2 = "z1952360";
+    $password2 = "2004May03";
+    $dsn2 = "mysql:host=courses;dbname=z1952360";
     $pdo2 = new PDO($dsn2, $username2, $password2);
     $pdo2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
