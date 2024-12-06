@@ -33,12 +33,6 @@ try {
             $unfulfilled_order_ids[] = $order['order_id'];
     }
 
-    // Echo the unfulfilled order IDs
-    echo "<h3>Unfulfilled Order IDs:</h3>";
-    echo "<pre>";
-    print_r($unfulfilled_order_ids);
-    echo "</pre>";
-
 // Check if orders are available
 if (empty($orders)) {
     echo "<p>No unfulfilled orders found.</p>";
